@@ -1,7 +1,5 @@
-// Conexão com o db
 const sqliteConnection = require('../../sqlite')
 
-// Tabelas
 const createUsers = require('./createUsers')
 
 async function migrationsRun(){

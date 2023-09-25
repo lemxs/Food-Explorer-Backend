@@ -14,11 +14,11 @@ A criação de uma API destinada a centralizar informações de users, encomenda
   PORT=
 
 # Faça a instalação das depêndencias
-  npm i
+  npm install
 
-# Rode as migration
+# Inicie a migração
   npm run migrate
 
-# Executando o projeto no ambiente de desenvolvimento
+# Executando o projeto
   npm run dev
 ```

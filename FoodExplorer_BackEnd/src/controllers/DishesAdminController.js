@@ -5,25 +5,18 @@ const DiskStorage = require("../providers/DiskStorage")
 
 class DishesAdminController{
     async create(request, response) {
-        // Parâmetros enviados pelo body
         const {title, description, category, price, ingredients} = request.body;
 
-        // Conferência se o prato já existe no banco de dados
         const checkDishAlreadyExistInDatabase = await knex("dishes").where({title}).first();
     
         if(checkDishAlreadyExistInDatabase){
             throw new AppError("Este prato já existe em nossa database")
         }
         
-        // TESTE
-        // Pegando o nome do arquivo
         const dishFilename = request.file.filename;
-        // Instanciando o diskstorage
         const diskStorage = new DiskStorage()
-        // Caso ainda não exista
         const filename = await diskStorage.saveFile(dishFilename);
         
-        // Inserindo o prato e todos os seus dados
         const dish_id = await knex("dishes").insert({
             image: filename,
             title,
@@ -33,7 +26,6 @@ class DishesAdminController{
         });
         
 
-        // Inserindo os ingredients passado no dish na tabela de ingredients
         const ingredientsInsert = ingredients.map(ingredient => {
             return{
                 name: ingredient,
@@ -56,18 +48,15 @@ class DishesAdminController{
     }
 
     async update(request, response){
-        // Capturando as informações passadas peloo body e por params
         const { title, description, category, image, price, ingredients } = request.body;
         const { id } = request.params;
 
-        // Adicionando na constante dish o primeiro dado encontrado par ao id passado como params
         const dish = await knex("dishes").where({ id }).first();
 
         if(!dish){
             throw new AppError("O prato que você está tentando atualizar não existe")
         }
 
-        // Verificação
         dish.title = title ?? dish.title;
         dish.description = description ?? dish.description;
         dish.category = category ?? dish.category;

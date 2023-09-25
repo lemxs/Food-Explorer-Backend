@@ -20,15 +20,12 @@ class UserAvatarController {
         }
 
         if(user.avatar){
-            // deletando a foto antiga, se houver
             await diskStorage.deleteFile(user.avatar);
         }
 
-        // Fazendo a troca
         const filename = await diskStorage.saveFile(avatarFilename);
         user.avatar = filename;
 
-        // Atualizando os campos no db
         await database.run(`
         UPDATE users SET
         avatar = ?
